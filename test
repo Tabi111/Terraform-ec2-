@@ -1,0 +1,11 @@
+resource "aws_instance" "ec2_demo" {
+  ami           = data.aws_ami.amazonlinux2.id
+  instance_type = var.instance_type_list[0]
+  user_data     = file("${path.module}/app1-install.sh")
+  vpc_security_group_ids = [aws_security_group.web-traffic.name]
+  key_name      = var.key_pair
+  count = 1
+  tags = {
+    "Name" = "prod-${count.index}"
+  }
+}
